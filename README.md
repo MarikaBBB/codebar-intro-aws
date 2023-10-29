@@ -1,6 +1,6 @@
 # Codebar Event: Building a Simple Python API with AWS Serverless
 
-I had attendrd the codebar workshop where we delved into the world of AWS (Amazon Web Services) and learned how to create a basic Python API using serverless technologies. 
+I had attended the codebar workshop where we delved into the world of AWS (Amazon Web Services) and learned how to create a basic Python API using serverless technologies. 
 
 ## Workshop Details
 
@@ -12,15 +12,15 @@ I had attendrd the codebar workshop where we delved into the world of AWS (Amazo
 
 ## Workshop Highlights
 
-**Introduction to Serverless** : Introduction to serverless computing, including its advantages and use cases. Understanding the fundamentals was crucial before diving into the practical aspects.
+- **Introduction to Serverless**: Introduction to serverless computing, including its advantages and use cases. Understanding the fundamentals was crucial before diving into the practical aspects.
 
-**AWS Serverless Stack** : The workshop provided an overview of the AWS serverless ecosystem. I got to know the core AWS services, with a primary focus on AWS Lambda and Amazon API Gateway. 
+- **AWS Serverless Stack**: The workshop provided an overview of the AWS serverless ecosystem. I learned the core AWS services, primarily focusing on AWS Lambda and Amazon API Gateway. 
 
-**Python and AWS** : Learning how Python can be seamlessly integrated into serverless workflows.
+- **Python and AWS**: Learning how Python can seamlessly integrate into serverless workflows.
 
-**Creating an API** : We created a simple yet functional API using Python and AWS services. The step-by-step guidance made the process approachable, even for those new to serverless development.
+- **Creating an API**: We created a simple yet functional API using Python and AWS services. The step-by-step guidance made the process approachable, even for those new to serverless development.
 
-**Deployment** : I gained practical insights into the deployment process for serverless applications. 
+- **Deployment**: I gained practical insights into the deployment process for serverless applications. 
 
  ## Deploying
 
