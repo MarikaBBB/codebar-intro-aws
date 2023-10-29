@@ -1,0 +1,104 @@
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  GetItemsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: GetItemsFunction
+      CodeUri: src/GetItemsFunction
+      Handler: handler.handler
+      Runtime: python3.11
+      MemorySize: 128
+      Timeout: 5
+      Tracing: Active
+      Events:
+        ApiGETitems:
+          Type: Api
+          Properties:
+            Path: /items
+            Method: GET
+            RestApiId: !Ref Api
+      Environment:
+        Variables:
+          ITEMSTABLE_TABLE_NAME: !Ref ItemsTable
+          ITEMSTABLE_TABLE_ARN: !GetAtt ItemsTable.Arn
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ItemsTable
+  GetItemsFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${GetItemsFunction}
+  Api:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub
+        - ${ResourceName} From Stack ${AWS::StackName}
+        - ResourceName: Api
+      StageName: Prod
+      DefinitionBody:
+        openapi: '3.0'
+        info: {}
+        paths:
+          /items:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetItemsFunction.Arn}/invocations
+              responses: {}
+            post:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PostItemsFunction.Arn}/invocations
+              responses: {}
+      EndpointConfiguration: REGIONAL
+      TracingEnabled: true
+      Cors:
+        MaxAge: 5
+  PostItemsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: PostItemsFunction
+      CodeUri: src/PostItemsFunction
+      Handler: handler.handler
+      Runtime: python3.11
+      MemorySize: 128
+      Timeout: 5
+      Tracing: Active
+      Events:
+        ApiPOSTitems:
+          Type: Api
+          Properties:
+            Path: /items
+            Method: POST
+            RestApiId: !Ref Api
+      Environment:
+        Variables:
+          ITEMSTABLE_TABLE_NAME: !Ref ItemsTable
+          ITEMSTABLE_TABLE_ARN: !GetAtt ItemsTable.Arn
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ItemsTable
+  PostItemsFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${PostItemsFunction}
+  ItemsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
